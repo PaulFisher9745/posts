@@ -14,6 +14,8 @@ import EditPosts from './pages/posts/edit';
 import AddPost from './pages/posts/add';
 import Auth from './pages/auth';
 import Registration from './pages/register';
+import { store } from "./store/store"
+import { Provider } from 'react-redux';
 
 const router = createBrowserRouter([
   {
@@ -55,7 +57,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-   <RouterProvider router={router}/>
+    <Provider store={store}>
+      <RouterProvider router={router}/>
+    </Provider> 
   </React.StrictMode>
 );
 
