@@ -1,9 +1,9 @@
 import React from 'react'
 
-const EditPosts = () => {
+const EditPostsPage = () => {
   return (
     <div>Это страничка редактирования постов!</div>
   )
 }
 
-export default EditPosts
+export default EditPostsPage

@@ -1,6 +1,6 @@
 import React from 'react'
-import Container from '../../components/Container'
 import Posts from '../../components/Posts'
+import Container from '../../components/Container'
 import Typo from '../../components/Typo'
 
 const INITIAL_POSTS = [
@@ -26,15 +26,15 @@ const INITIAL_POSTS = [
   },
 ]
 
-const PostsPage = () => {
+const MainPage = () => {
   return (
     <>
         <Container>
-            <Typo>Публикации</Typo>
+          <Typo>Свежие публикации</Typo>
             <Posts posts={INITIAL_POSTS}/>
         </Container>
     </>  
   )
 }
 
-export default PostsPage
+export default MainPage

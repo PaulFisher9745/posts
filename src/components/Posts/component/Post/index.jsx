@@ -1,0 +1,14 @@
+import React from 'react'
+import * as SC from "./styled"
+
+const Post = ({post}) => {
+  return (
+    <SC.Post>
+        <SC.Image src={post.image} alt={post.title}/>
+        <SC.Title>{post.title}</SC.Title> 
+        <SC.DetailLink to={`/posts/${post.id}`}>Читать далее...</SC.DetailLink>
+    </SC.Post>
+  )
+}
+
+export default Post

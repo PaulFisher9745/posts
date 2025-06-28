@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Posts = () => {
+const DetailPostPage = () => {
   return (
     <div>Это детальная страница постов!</div>
   )
 }
 
-export default Posts
+export default DetailPostPage
