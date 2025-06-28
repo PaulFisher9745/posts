@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Auth = () => {
+const AuthPage = () => {
   return (
     <div>Это страничка авторизации!</div>
   )
 }
 
-export default Auth
+export default AuthPage

@@ -7,14 +7,14 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom"
-import Posts from './pages/posts';
+import PostsPage from './pages/posts';
 import Root from './components/Root';
-import DetailPost from './pages/posts/detail';
-import EditPosts from './pages/posts/edit';
-import AddPost from './pages/posts/add';
-import Auth from './pages/auth';
-import Registration from './pages/register';
-import { store } from "./store/store"
+import DetailPostPage from './pages/posts/detail';
+import EditPostsPage from './pages/posts/edit';
+import AddPostPage from './pages/posts/add';
+import AuthPage from './pages/auth';
+import RegistrationPage from './pages/register';
+import { store } from "./redux/store"
 import { Provider } from 'react-redux';
 
 const router = createBrowserRouter([
@@ -28,27 +28,27 @@ const router = createBrowserRouter([
       },
       {
         path: 'posts',
-        element: <Posts/>
+        element: <PostsPage/>
       },
       {
         path: "posts/:id",
-        element: <DetailPost/>
+        element: <DetailPostPage/>
       },
       {
         path: "posts/:id/edit",
-        element: <EditPosts/>
+        element: <EditPostsPage/>
       },
       {
         path: "posts/add",
-        element: <AddPost/>
+        element: <AddPostPage/>
       },
       {
         path: "auth",
-        element: <Auth/>
+        element: <AuthPage/>
       },
       {
         path: "registration",
-        element: <Registration/>
+        element: <RegistrationPage/>
       },
     ]
   }
