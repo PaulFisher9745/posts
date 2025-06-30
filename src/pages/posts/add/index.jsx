@@ -1,8 +1,9 @@
 import React from 'react'
+import PostForm from '../components/PostForm'
 
 const AddPostPage = () => {
   return (
-    <div>Это страничка добавления постов!</div>
+    <PostForm/>
   )
 }
 
