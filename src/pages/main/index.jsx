@@ -3,7 +3,7 @@ import Posts from '../../components/Posts'
 import Container from '../../components/Container'
 import Typo from '../../components/Typo'
 import { useDispatch, useSelector } from 'react-redux'
-import { getFreshPosts } from '../../redux/slices/postsSlice'
+import { getFreshListFromList, getFreshPosts } from '../../redux/slices/postsSlice'
 
 const MainPage = () => {
 
@@ -11,11 +11,16 @@ const MainPage = () => {
 
   const {post} = useSelector((state) => state.posts.postForView)
   const {posts, loading} = useSelector((state) => state.posts.freshPosts)
+  const {list} = useSelector((state) => state.posts.posts)
 
 
   useEffect(() =>{
-    dispatch(getFreshPosts())
-  },[dispatch])
+    if(!list) {
+      dispatch(getFreshPosts())
+    } else {
+      dispatch(getFreshListFromList())
+    }
+  },[dispatch,list])
 
   return (
     <>
