@@ -44,6 +44,7 @@ const DetailPostPage = () => {
       <div style={{clear: "both"}}></div>
       <SC.LinkWrapper>
         <Link to={"/posts"}>Обратно к публикациям</Link>
+        <Link to={`/posts/${post.id}/edit`}>Редактировать</Link>
       </SC.LinkWrapper>
       
     </Container>

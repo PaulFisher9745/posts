@@ -7,9 +7,7 @@ import { getPosts } from '../../redux/slices/postsSlice'
 
 
 const PostsPage = () => {
-  const {list, loading} = useSelector((state) => {
-    return state.posts.posts
-  })
+  const {list, loading} = useSelector((state) => state.posts.posts)
   const dispatch = useDispatch()
 
   useEffect(() =>{

@@ -43,6 +43,12 @@ export const postsSlice = createSlice({
     initialState,
     reducers: {
         editPosts: (state,action) => {
+          state.posts.list = state.posts.list.map((post) => {
+            if(post.id === action.payload.id) {
+              return action.payload
+            }
+            return post
+          })
         },
         addPost: (state,action) => {
           const newPost = {...action.payload}
@@ -54,6 +60,9 @@ export const postsSlice = createSlice({
             post: action.payload,
             loading: false
           }
+        },
+        getFreshListFromList: (state) => {
+          state.freshPosts.posts = state.posts.list.slice(0,3)
         }
     },
     extraReducers: (builder) => {
@@ -96,6 +105,6 @@ export const postsSlice = createSlice({
     }
 })
 
-export const {editPosts, addPost, showPost } = postsSlice.actions
+export const {editPosts, addPost, showPost,getFreshListFromList} = postsSlice.actions
 
 export default postsSlice.reducer
