@@ -1,59 +1,101 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { postsAPI } from "../../api/postsAPI"
 
 const initialState = {
-    list: [
-  {
-    id:1,
-    title: "post 1",
-    image: "https://avatars.mds.yandex.net/i?id=2a00000197a64025d8aa1821cb298414b8ee-1767271-fast-images&n=13",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima molestiae laborum expedita eius natus adipisci asperiores, possimus placeat commodi nobis sit recusandae aliquid doloremque blanditiis fugiat quasi ratione aspernatur at!"
-  },
-   {
-    id:2,
-    title: "post 2",
-    image: "https://avatars.mds.yandex.net/i?id=2a00000197a64025d8aa1821cb298414b8ee-1767271-fast-images&n=13",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima molestiae laborum expedita eius natus adipisci asperiores, possimus placeat commodi nobis sit recusandae aliquid doloremque blanditiis fugiat quasi ratione aspernatur at!"
-  },
-   {
-    id:3,
-    title: "post 3",
-    image: "https://avatars.mds.yandex.net/i?id=2a00000197a64025d8aa1821cb298414b8ee-1767271-fast-images&n=13",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima molestiae laborum expedita eius natus adipisci asperiores, possimus placeat commodi nobis sit recusandae aliquid doloremque blanditiis fugiat quasi ratione aspernatur at!"
-  },
-   {
-    id:4,
-    title: "post 4",
-    image: "https://avatars.mds.yandex.net/i?id=2a00000197a64025d8aa1821cb298414b8ee-1767271-fast-images&n=13",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima molestiae laborum expedita eius natus adipisci asperiores, possimus placeat commodi nobis sit recusandae aliquid doloremque blanditiis fugiat quasi ratione aspernatur at!"
-  },
-],
-    postForView: null,
-    freshPosts: null
+    posts: {
+      list: null,
+      loading: false
+    },
+    postForView: {
+      post: null,
+      loading: false
+    },
+    freshPosts: {
+      posts: null,
+      loading: false
+    }
 
 }
+
+export const getPostById = createAsyncThunk(
+  'posts/fetchById',
+  async (postId) => {
+    return await postsAPI.fetchById(postId)
+  }
+)
+
+export const getFreshPosts = createAsyncThunk(
+  'posts/fetchFreshPosts',
+  async (limit) => {
+    return await postsAPI.fetchFreshPosts(limit)
+  }
+)
+
+export const getPosts = createAsyncThunk(
+  'posts/fetchPosts',
+  async () => {
+    return await postsAPI.fetchPosts()
+  }
+)
 
 export const postsSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
-        setPosts: (state,action) => {
-            state.list = action.payload       
-        },
         editPosts: (state,action) => {
-
-        },
-        getPosts: (state,action) => {
-            state.postForView = state.list.find((item) => item.id === action.payload)
-        },
-        getFreshPosts: (state) => {
-          state.freshPosts = state.list.slice(0,3)
         },
         addPost: (state,action) => {
-
+          const newPost = {...action.payload}
+          newPost.id = new Date().getTime()
+          state.posts.list = state.posts.list ? [newPost,...state.posts.list] : [newPost]
+        },
+        showPost: (state,action) => {
+          state.postForView = {
+            post: action.payload,
+            loading: false
+          }
         }
-    }    
+    },
+    extraReducers: (builder) => {
+      builder.addCase(getPostById.pending, (state) => {
+        state.postForView = {
+          post: null,
+          loading: true
+        }
+      })
+      builder.addCase(getPostById.fulfilled, (state,action) => {
+        state.postForView = {
+          post: action.payload,
+          loading: false
+        }
+      })
+      builder.addCase(getPosts.pending, (state) => {
+        state.posts = {
+          list: null,
+          loading: true
+        }
+      })
+      builder.addCase(getPosts.fulfilled, (state,action) => {
+        state.posts = {
+          list: action.payload,
+          loading: false
+        }
+      })
+      builder.addCase(getFreshPosts.pending, (state) => {
+        state.freshPosts = {
+          posts: null,
+          loading: true
+        }
+      })
+      builder.addCase(getFreshPosts.fulfilled, (state,action) => {
+        state.freshPosts = {
+          posts: action.payload,
+          loading: false
+        }
+      })
+    }
 })
 
-export const {setPosts, editPosts, getPosts, addPost, getFreshPosts} = postsSlice.actions
+export const {editPosts, addPost, showPost } = postsSlice.actions
 
 export default postsSlice.reducer

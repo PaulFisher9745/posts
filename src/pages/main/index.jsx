@@ -9,8 +9,9 @@ const MainPage = () => {
 
   const dispatch = useDispatch()
 
-  const postForView = useSelector((state) => state.posts.postForView)
-  const freshPosts = useSelector((state) => state.posts.freshPosts)
+  const {post} = useSelector((state) => state.posts.postForView)
+  const {posts, loading} = useSelector((state) => state.posts.freshPosts)
+
 
   useEffect(() =>{
     dispatch(getFreshPosts())
@@ -19,16 +20,17 @@ const MainPage = () => {
   return (
     <>
         <Container>
-          {freshPosts && 
+          {loading && <>Loading...</>}
+          {posts && 
             <>
             <Typo>Свежие публикации</Typo>
-            <Posts posts={freshPosts}/>
+            <Posts posts={posts}/>
             </>
           }
-          {postForView && 
+          {post && 
             <>
             <Typo>Последний просмотренный пост</Typo>
-            <Posts posts={[postForView]}/>
+            <Posts posts={[post]}/>
             </>
           }
         </Container>
