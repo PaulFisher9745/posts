@@ -1,6 +1,6 @@
 import React from 'react'
 import * as SC from "./styled"
-import Link from '../../../Link'
+import Link from '../../../../components/ui/Link/index'
 
 const Post = ({post}) => {
   const image = post.image || "https://avatars.mds.yandex.net/i?id=2a00000197a64025d8aa1821cb298414b8ee-1767271-fast-images&n=13"

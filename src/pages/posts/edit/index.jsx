@@ -3,7 +3,7 @@ import PostForm from '../components/PostForm'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { editPosts, } from '../../../redux/slices/postsSlice'
-import Container from '../../../components/Container'
+import Container from '../../../components/ui/Container'
 
 const EditPostsPage = () => {
   const {id} = useParams()
