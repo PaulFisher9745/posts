@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import * as SC from "./styled"
-import Container from '../../../../components/Container'
-import Typo from '../../../../components/Typo'
+import Container from '../../../../components/ui/Container'
+import Typo from '../../../../components/ui/Typo'
+import Form from '../../../../components/ui/Form'
+import Field from '../../../../components/ui/Field'
+import { Input } from '../../../../components/ui/Input/styled'
 
 const DEFAULT_VALUE = {
         title: "",
@@ -27,17 +30,17 @@ const PostForm = ({title, onSubmitForm, defaultValues}) => {
   return (
     <Container>
         <Typo>{title}</Typo>
-        <SC.Form onSubmit={onSubmit} action="">
-            <SC.Field>
-                <SC.Input 
+        <Form onSubmit={onSubmit} action="">
+            <Field>
+                <Input 
                     type="text" 
                     name='title' 
                     placeholder="Заголовок поста"
                     value={formValues.title}
                     onChange={(e) => onChange(e.target.name, e.target.value)}
                 />
-            </SC.Field>
-            <SC.Field>
+            </Field>
+            <Field>
                 <SC.TextArea 
                     rows={10} 
                     cols={30} 
@@ -46,9 +49,9 @@ const PostForm = ({title, onSubmitForm, defaultValues}) => {
                     value={formValues.body}
                     onChange={(e) => onChange(e.target.name, e.target.value)}
                 />                    
-            </SC.Field>
+            </Field>
             <SC.Button disabled={disabled} type='submit'>Сохранить</SC.Button>
-        </SC.Form>
+        </Form>
     </Container>
   )
 }

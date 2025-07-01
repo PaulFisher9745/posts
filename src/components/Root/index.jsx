@@ -1,8 +1,8 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import * as SC from './styled'
-import Container from '../Container'
-import Link from '../Link'
+import Container from '../../components/ui/Container/index'
+import Link from '../../components/ui/Link/index'
 
 const Root = () => {
   return (
