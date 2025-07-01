@@ -1,17 +1,27 @@
-import React, { useEffect } from 'react'
-import {useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import {useParams, useNavigate } from 'react-router-dom'
 import Typo from '../../../components/Typo'
 import Container from '../../../components/Container'
 import * as SC from './styled'
 import Link from '../../../components/Link'
 import { useSelector, useDispatch } from 'react-redux'
-import {getPostById, showPost} from "../../../redux/slices/postsSlice"
+import {deletePost, getPostById, showPost} from "../../../redux/slices/postsSlice"
 
 const DetailPostPage = () => {
   const {id} = useParams()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const {list} = useSelector((state) => state.posts.posts)
   const postForView = useSelector((state) => state.posts.postForView)
-  const dispatch = useDispatch()
+  
+  const [postForDelete, setPostForDelete] = useState(null)
+
+  const onDeletePost = () => {
+    dispatch(deletePost(postForDelete))
+    setPostForDelete(null)
+    return navigate("/posts")
+  }
 
   useEffect(() => {
     const initId = Number(id)
@@ -38,13 +48,25 @@ const DetailPostPage = () => {
 
   return (
     <Container>
+      {postForDelete && 
+        <SC.ModalWrapper onClick={() => setPostForDelete(null)}>
+            <SC.Modal>
+              <SC.ModalText>Вы уверены, что хотите удалить публикацию с ID - {post.id}?</SC.ModalText>
+              <SC.ModalContent>
+                <SC.DeleteButton onClick={() => onDeletePost()}>Да</SC.DeleteButton>
+                <button onClick={() => setPostForDelete(null)}>Нет</button>
+              </SC.ModalContent>
+            </SC.Modal>
+        </SC.ModalWrapper>
+      }
       <Typo>{post.title}</Typo>
       <SC.Image src={image} alt={post.title}/>
       <SC.Text>{post.body}</SC.Text>
       <div style={{clear: "both"}}></div>
       <SC.LinkWrapper>
         <Link to={"/posts"}>Обратно к публикациям</Link>
-        <Link to={`/posts/${post.id}/edit`}>Редактировать</Link>
+        {list && <Link to={`/posts/${post.id}/edit`}>Редактировать</Link>}
+        {list && <SC.DeleteButton onClick={() => setPostForDelete(post)}>Удалить</SC.DeleteButton>}
       </SC.LinkWrapper>
       
     </Container>
