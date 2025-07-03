@@ -16,7 +16,7 @@ const RegistrationPage = () => {
   const navigate = useNavigate()
   const userId = Date.now()
   const onSubmit = (e) => {
-    e.preventDefaul()
+    e.preventDefault()
     try {
       const users = JSON.parse(localStorage.getItem("users"))
       const newUser = {id: userId, ...formValues}
@@ -78,7 +78,7 @@ const RegistrationPage = () => {
         </Field>
         <Field>
           <Input
-            type="text" 
+            type="password" 
             name='password' 
             placeholder="Пароль"
             value={formValues.password}
