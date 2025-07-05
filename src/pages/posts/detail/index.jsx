@@ -6,6 +6,8 @@ import * as SC from './styled'
 import Link from '../../../components/ui/Link'
 import { useSelector, useDispatch } from 'react-redux'
 import {deletePost, getPostById, showPost} from "../../../redux/slices/postsSlice"
+import Modal from '../../../components/Modal'
+import Loader from '../../../components/ui/Loader'
 
 const DetailPostPage = () => {
   const {id} = useParams()
@@ -15,12 +17,14 @@ const DetailPostPage = () => {
   const {list} = useSelector((state) => state.posts.posts)
   const {user} = useSelector((state) => state.auth)
   const postForView = useSelector((state) => state.posts.postForView)
-  
+  const [isDelete, setIsDelete] = useState(false)
+
   const [postForDelete, setPostForDelete] = useState(null)
 
   const showEditAndDeleteBtn = list && user
 
   const onDeletePost = () => {
+    setIsDelete(true)
     dispatch(deletePost(postForDelete))
     setPostForDelete(null)
     return navigate("/posts")
@@ -28,17 +32,17 @@ const DetailPostPage = () => {
 
   useEffect(() => {
     const initId = Number(id)
-    const findedPosts = list ? list.find((item) => item.id === initId) : undefined
+    const findedPosts = list?.find((item) => item.id === initId)
     if (findedPosts) {
       dispatch(showPost(findedPosts))
-    } else {
+    } else if (!isDelete) {
       dispatch(getPostById(initId))
     }
     
-  },[id,list,dispatch])
+  },[id,list,dispatch,isDelete])
 
   if(postForView.loading) {
-    return <Container>Loading...</Container>
+    return <Loader/>
   }
 
   if(!postForView.post || !postForView.post.hasOwnProperty("id")) { 
@@ -52,15 +56,14 @@ const DetailPostPage = () => {
   return (
     <Container>
       {postForDelete && 
-        <SC.ModalWrapper onClick={() => setPostForDelete(null)}>
-            <SC.Modal>
-              <SC.ModalText>Вы уверены, что хотите удалить публикацию с ID - {post.id}?</SC.ModalText>
-              <SC.ModalContent>
-                <SC.DeleteButton onClick={() => onDeletePost()}>Да</SC.DeleteButton>
-                <button onClick={() => setPostForDelete(null)}>Нет</button>
-              </SC.ModalContent>
-            </SC.Modal>
-        </SC.ModalWrapper>
+        <Modal 
+          modalWrapper={() => setPostForDelete(null)}
+          deleteButton={() => onDeletePost()}
+          modal={() => setPostForDelete(post)}
+          button={() => setPostForDelete(null)}
+        >
+        Вы уверены, что хотите удалить публикацию с ID - {post.id}?
+        </Modal>
       }
       <Typo>{post.title}</Typo>
       <SC.Image src={image} alt={post.title}/>

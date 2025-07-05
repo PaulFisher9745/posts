@@ -4,6 +4,7 @@ import Container from '../../components/ui/Container'
 import Typo from '../../components/ui/Typo'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFreshListFromList, getFreshPosts } from '../../redux/slices/postsSlice'
+import Loader from '../../components/ui/Loader'
 
 const MainPage = () => {
 
@@ -12,7 +13,6 @@ const MainPage = () => {
   const {post} = useSelector((state) => state.posts.postForView)
   const {posts, loading} = useSelector((state) => state.posts.freshPosts)
   const {list} = useSelector((state) => state.posts.posts)
-
 
   useEffect(() =>{
     if(!list) {
@@ -25,14 +25,14 @@ const MainPage = () => {
   return (
     <>
         <Container>
-          {loading && <>Loading...</>}
-          {posts && 
+          {loading && <Loader/>}
+          {posts &&
             <>
             <Typo>Свежие публикации</Typo>
             <Posts posts={posts}/>
             </>
           }
-          {post && 
+          {post &&
             <>
             <Typo>Последний просмотренный пост</Typo>
             <Posts posts={[post]}/>
