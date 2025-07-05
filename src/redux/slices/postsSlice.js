@@ -13,6 +13,11 @@ const initialState = {
     freshPosts: {
       posts: null,
       loading: false
+    },
+    postsPagination: {
+      posts: null,
+      sort: "fresh",
+      page: 1
     }
 
 }
@@ -70,6 +75,29 @@ export const postsSlice = createSlice({
         },
         getFreshListFromList: (state) => {
           state.freshPosts.posts = state.posts.list.slice(0,3)
+        },
+        getPostsForPagination: (state,action) => {
+          state.postsPagination.posts = state.posts.list.slice(action.payload[0],action.payload[1])
+          state.postsPagination.page = action.payload[2]
+        },
+        sortedPosts: (state,action) => {
+          switch (action.payload) {
+            case "fresh":
+              state.posts.list = state.posts.list.sort((a, b) => b.id - a.id)   
+              state.postsPagination.posts = state.postsPagination.posts.sort((a, b) => b.id - a.id)
+              state.postsPagination.sort = action.payload
+              break;
+            case "old" :
+              state.posts.list = state.posts.list.sort((a, b) => a.id - b.id)   
+              state.postsPagination.posts = state.postsPagination.posts.sort((a, b) => a.id - b.id)
+              state.postsPagination.sort = action.payload
+              break;
+            default:
+              break;
+          }
+        },
+        searchPosts: (state,action) => {
+          state.postsPagination.posts = state.postsPagination.posts.filter((post) => post.title.toLowerCase().includes(action.payload.toLowerCase()))
         }
     },
     extraReducers: (builder) => {
@@ -112,6 +140,14 @@ export const postsSlice = createSlice({
     }
 })
 
-export const {editPosts, addPost, showPost,getFreshListFromList, deletePost} = postsSlice.actions
+export const {
+  editPosts, 
+  addPost, 
+  showPost,
+  getFreshListFromList, 
+  deletePost, 
+  getPostsForPagination, 
+  sortedPosts,
+  searchPosts} = postsSlice.actions
 
 export default postsSlice.reducer
