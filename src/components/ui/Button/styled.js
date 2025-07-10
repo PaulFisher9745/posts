@@ -5,6 +5,7 @@ export const Button = styled.button`
     border: 1px solid black;
     padding: 5px 10px;
     background: white;
+    cursor: pointer;
 
     &:hover {
         background: grey;

@@ -13,6 +13,7 @@ const Root = () => {
   const navigate = useNavigate()
 
   const onClickExitBtn = () => {
+    console.log("work")
     dispatch(logout())
     navigate("/auth")
   }
@@ -24,7 +25,7 @@ const Root = () => {
             <Link simple={false} to={"/"}>Главная</Link>
             <Link simple={false} to={"/posts"}>Список постов</Link>
             {!user && <Link simple={false} to={"/auth"}>Авторизация</Link>}
-            {!user &&   <Link simple={false} to={"/registration"}>Регистрация</Link>}
+            {!user &&  <Link simple={false} to={"/registration"}>Регистрация</Link>}
             {user && <Link simple={false} to={"/posts/add"}>Добавление поста</Link>}
             {user && <Button onClick={onClickExitBtn}>Выход</Button>}
           </SC.Menu>

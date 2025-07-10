@@ -14,8 +14,9 @@ const initialState = {
       posts: null,
       loading: false
     },
-    postsPagination: {
+    postsFilters: {
       posts: null,
+      postsPrev: null,
       sort: "fresh",
       page: 1
     }
@@ -77,27 +78,31 @@ export const postsSlice = createSlice({
           state.freshPosts.posts = state.posts.list.slice(0,3)
         },
         getPostsForPagination: (state,action) => {
-          state.postsPagination.posts = state.posts.list.slice(action.payload[0],action.payload[1])
-          state.postsPagination.page = action.payload[2]
+          state.postsFilters.posts = state.posts.list.slice(action.payload[0],action.payload[1])
+          state.postsFilters.postsPrev = state.posts.list.slice(action.payload[0],action.payload[1])
+          state.postsFilters.page = action.payload[2]
         },
         sortedPosts: (state,action) => {
           switch (action.payload) {
             case "fresh":
               state.posts.list = state.posts.list.sort((a, b) => b.id - a.id)   
-              state.postsPagination.posts = state.postsPagination.posts.sort((a, b) => b.id - a.id)
-              state.postsPagination.sort = action.payload
+              state.postsFilters.posts = state.postsFilters.posts.sort((a, b) => b.id - a.id)
+              state.postsFilters.sort = action.payload
               break;
             case "old" :
               state.posts.list = state.posts.list.sort((a, b) => a.id - b.id)   
-              state.postsPagination.posts = state.postsPagination.posts.sort((a, b) => a.id - b.id)
-              state.postsPagination.sort = action.payload
+              state.postsFilters.posts = state.postsFilters.posts.sort((a, b) => a.id - b.id)
+              state.postsFilters.sort = action.payload
               break;
             default:
               break;
           }
         },
         searchPosts: (state,action) => {
-          state.postsPagination.posts = state.postsPagination.posts.filter((post) => post.title.toLowerCase().includes(action.payload.toLowerCase()))
+          if(!action.payload) {
+            state.postsFilters.posts = state.postsFilters.postsPrev
+          }
+          state.postsFilters.posts = state.postsFilters.posts.filter((post) => post.title.toLowerCase().includes(action.payload.toLowerCase()))
         }
     },
     extraReducers: (builder) => {

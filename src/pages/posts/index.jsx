@@ -1,4 +1,4 @@
-import React, { useEffect, useState }  from 'react'
+import React, { useCallback, useEffect, useState }  from 'react'
 import Container from '../../components/ui/Container'
 import Posts from '../../components/Posts'
 import Typo from '../../components/ui/Typo'
@@ -13,14 +13,30 @@ import Search from '../../components/ui/Search'
 
 const PostsPage = () => {
   const {list, loading} = useSelector((state) => state.posts.posts)
-  const {posts,page} = useSelector((state) => state.posts.postsPagination)
+  const {posts,page} = useSelector((state) => state.posts.postsFilters)
   const dispatch = useDispatch()
 
   const [currentPage, setCurrentPage] = useState(page)
+  const [pages,setPages] = useState(0)
   const postsPerPage = 10
   const [totalPages, setTotalPages] = useState(0)
   const firstNumForSlice = Number((currentPage - 1) * 10)
   const secondNumForSlice = Number(currentPage * 10) 
+
+  const handlePageChange = useCallback((page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  },[totalPages])
+
+  const sortPosts = (sort) => {
+    dispatch(sortedPosts(sort))
+  }
+
+  const searchingPosts = (search) => {
+    dispatch(getPostsForPagination([firstNumForSlice,secondNumForSlice,currentPage]))
+    dispatch(searchPosts(search))
+  }
 
   useEffect(() =>{
     if(!list) {
@@ -28,8 +44,7 @@ const PostsPage = () => {
     } else {
       setTotalPages(Math.ceil(list.length/postsPerPage))
     }
-   
-  },[list,dispatch])
+  },[posts,list,dispatch])
 
   useEffect(() =>{
     if(!list) {
@@ -38,6 +53,23 @@ const PostsPage = () => {
     dispatch(getPostsForPagination([firstNumForSlice,secondNumForSlice,currentPage]))
 
   },[dispatch,list,currentPage,firstNumForSlice,secondNumForSlice])
+
+    useEffect(() => {
+    const getPages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      getPages.push(
+        <SC.PageButton
+          key={i}
+          className={currentPage === i ? 'active' : ''} 
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </SC.PageButton>
+      );
+    }
+    return setPages(getPages);
+  },[posts,currentPage,totalPages,handlePageChange])
+
 
 
   if (!list && loading) {
@@ -48,36 +80,6 @@ const PostsPage = () => {
    return <>404</>
   }
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  }
-
- const getPages =() => {
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <SC.PageButton
-          key={i}
-          className={currentPage === i ? 'active' : ''} 
-          onClick={() => handlePageChange(i)}
-        >
-          {i}
-        </SC.PageButton>
-      );
-    }
-    return pages;
-  }
-
-  const sortPosts = (sort) => {
-    dispatch(sortedPosts(sort))
-  }
-
-  const searchingPosts = (search) => {
-    dispatch(getPostsForPagination([firstNumForSlice,secondNumForSlice]))
-    dispatch(searchPosts(search))
-  }
 
   return (
         <Container>      
@@ -100,7 +102,7 @@ const PostsPage = () => {
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               />
-              {posts && getPages()}
+              {posts && pages}
               <SC.Img 
                 src={btnRight} alt="" 
                 onClick={() => handlePageChange(currentPage + 1)}

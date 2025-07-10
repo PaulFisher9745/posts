@@ -4,7 +4,7 @@ import * as SC from "./styled"
 
 const Sort = ({sortPosts}) => {
 
-    const {sort} = useSelector((state) => state.posts.postsPagination)
+    const {sort} = useSelector((state) => state.posts.postsFilters)
 
   return (
     <SC.SortWrapper>

@@ -1,9 +1,9 @@
 import React from 'react'
 import * as SC from "./styled"
 
-const Button = ({children}) => {
+const Button = ({children,...props}) => {
   return (
-    <SC.Button>{children}</SC.Button>
+    <SC.Button {...props}>{children}</SC.Button>
   )
 }
 
